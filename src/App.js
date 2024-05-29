@@ -164,74 +164,89 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      <form className='w-30 card shadow-lg p-5 form bg-dark'>
+      <form className='card shadow-lg p-5 form bg-dark d-flex align-items-center' style={{ width: '60%', maxWidth: '800px' }}>
         <div className='card-header text-white text-center'>
           <h1>Create New Company</h1>
         </div>
-        <div className='card-body mt-3'>
-          <div className='form-group'>
+        <div className='card-body mt-3 d-flex row'>
+          <div className='form-group col-md-6'>
             <input type='text' name='companyName' placeholder='Company' className='form-control mt-1' value={data.companyName} onChange={handleChange} />
           </div>
-          <div className='form-group mt-3'>
+          <div className='form-group col-md-6'>
             <input type='email' name='email' className='form-control mt-1' placeholder='Email' value={data.email} onChange={handleChange} />
           </div>
-          <div className='form-group mt-3'>
+          <div className='form-group mt-3 col-md-6'>
             <select name='subsidiary' className='form-control mt-1' value={data.subsidiary} onChange={handleChangeSub}>
               {subdiaries.map((subsidiary, index) => (
                 <option key={index} value={index}>{subsidiary.name}</option>
               ))}
             </select>
           </div>
-          <div className='form-group mt-3'>
+          <div className='form-group mt-3 col-md-6'>
             <input type='text' name='industry' className='form-control mt-1' placeholder='Industry' value={data.industry} onChange={handleChange} />
           </div>
-          <div className='form-group mt-3'>
+          <div className='form-group mt-3 col-md-6'>
             <input type='text' name='sectors' className='form-control mt-1' placeholder='Sectors' value={data.sectors} onChange={handleChange} />
           </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com1' className='form-control mt-1' placeholder='Componenent 1' value={data.com1} onChange={handleChange} />
+          <div className='col-md-6'></div>
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com1' className='form-control mt-1' placeholder='Componenent 1' value={data.com1} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com1desc' className='form-control mt-1' placeholder='Componenet 1 Description' value={data.com1desc} onChange={handleChange} />
+            </div>
           </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com1desc' className='form-control mt-1' placeholder='Componenet 1 Description' value={data.com1desc} onChange={handleChange} />
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com2' className='form-control mt-1' placeholder='Componenet 2' value={data.com2} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com2desc' className='form-control mt-1' placeholder='Componenet 2 Description' value={data.com2desc} onChange={handleChange} />
+            </div>
           </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com2' className='form-control mt-1' placeholder='Componenet 2' value={data.com2} onChange={handleChange} />
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com3' className='form-control mt-1' placeholder='Componenet 3' value={data.com3} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com3desc' className='form-control mt-1' placeholder='Componenet 3 Description' value={data.com3desc} onChange={handleChange} />
+            </div>
           </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com2desc' className='form-control mt-1' placeholder='Componenet 2 Description' value={data.com2desc} onChange={handleChange} />
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com4' className='form-control mt-1' placeholder='Componenet 4' value={data.com4} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com4desc' className='form-control mt-1' placeholder='Componenet 4 Description' value={data.com4desc} onChange={handleChange} />
+            </div>
           </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com3' className='form-control mt-1' placeholder='Componenet 3' value={data.com3} onChange={handleChange} />
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com5' className='form-control mt-1' placeholder='Componenet 5' value={data.com5} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com5desc' className='form-control mt-1' placeholder='Componenet 5 Description' value={data.com5desc} onChange={handleChange} />
+            </div>
           </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com3desc' className='form-control mt-1' placeholder='Componenet 3 Description' value={data.com3desc} onChange={handleChange} />
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com6' className='form-control mt-1' placeholder='Componenet 6' value={data.com6} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com6desc' className='form-control mt-1' placeholder='Componenet 6 Description' value={data.com6desc} onChange={handleChange} />
+            </div>
           </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com4' className='form-control mt-1' placeholder='Componenet 4' value={data.com4} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com4desc' className='form-control mt-1' placeholder='Componenet 4 Description' value={data.com4desc} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com5' className='form-control mt-1' placeholder='Componenet 5' value={data.com5} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com5desc' className='form-control mt-1' placeholder='Componenet 5 Description' value={data.com5desc} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com6' className='form-control mt-1' placeholder='Componenet 6' value={data.com6} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com6desc' className='form-control mt-1' placeholder='Componenet 6 Description' value={data.com6desc} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <input type='text' name='com7' className='form-control mt-1' placeholder='Componenet 7' value={data.com7} onChange={handleChange} />
-          </div>
-          <div className='form-group mt-3'>
-            <textarea type='text' name='com7desc' className='form-control mt-1' placeholder='Componenet 7 Description' value={data.com7desc} onChange={handleChange} />
+          <div className='mt-2 col-md-6'>
+            <div className='form-group mt-3'>
+              <input type='text' name='com7' className='form-control mt-1' placeholder='Componenet 7' value={data.com7} onChange={handleChange} />
+            </div>
+            <div className='form-group mt-2'>
+              <textarea type='text' name='com7desc' className='form-control mt-1' placeholder='Componenet 7 Description' value={data.com7desc} onChange={handleChange} />
+            </div>
           </div>
         </div>
-        <div className='card-footer d-flex justify-content-between mt-3'>
+        <div className='card-footer d-flex justify-content-between mt-3 w-100'>
           <button className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>Submit</button>
           <a href='https://drive.google.com/file/d/1zZaIAMbvLT8WtRVKvdtezJ-DfImCKHdF/view?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
         </div>

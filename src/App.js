@@ -173,7 +173,7 @@ function App() {
             <input type='text' name='companyName' placeholder='Company' className='form-control mt-1' value={data.companyName} onChange={handleChange} />
           </div>
           <div className='form-group col-md-6'>
-            <input type='email' name='email' className='form-control mt-1' placeholder='Email' value={data.email} onChange={handleChange} />
+            <input type='email' name='email' className='form-control mt-1' placeholder='My Email' value={data.email} onChange={handleChange} />
           </div>
           <div className='form-group mt-3 col-md-6'>
             <select name='subsidiary' className='form-control mt-1' value={data.subsidiary} onChange={handleChangeSub}>

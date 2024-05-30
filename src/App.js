@@ -166,7 +166,7 @@ function App() {
       />
       <form className='card shadow-lg p-5 form bg-dark d-flex align-items-center' style={{ width: '60%', maxWidth: '800px' }}>
         <div className='card-header text-white text-center'>
-          <h1>Create New Company</h1>
+          <h1>Create New Cooperation Proposal</h1>
         </div>
         <div className='card-body mt-3 d-flex row'>
           <div className='form-group col-md-6'>

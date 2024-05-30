@@ -248,7 +248,7 @@ function App() {
         </div>
         <div className='card-footer d-flex justify-content-between mt-3 w-100'>
           <button className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>Submit</button>
-          <a href='https://drive.google.com/file/d/1zZaIAMbvLT8WtRVKvdtezJ-DfImCKHdF/view?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
+          <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
         </div>
       </form>
     </div>

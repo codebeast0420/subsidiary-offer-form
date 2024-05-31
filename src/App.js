@@ -3,6 +3,7 @@ import './App.css';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { industries, sectors } from './constants';
 
 function App() {
 
@@ -25,8 +26,8 @@ function App() {
     companyName: '',
     email: '',
     subsidiary: 0,
-    industry: '',
-    sectors: '',
+    industry: industries[0],
+    sector: sectors[industries[0]][0],
     com1: '',
     com1desc: '',
     com2: '',
@@ -48,7 +49,7 @@ function App() {
     email,
     subsidiary,
     industry,
-    sectors,
+    sector,
     com1,
     com1desc,
     com2,
@@ -106,7 +107,7 @@ function App() {
           subdiaries[subsidiary].email,
           subdiaries[subsidiary].logo,
           industry,
-          sectors,
+          sector,
           com1,
           com1desc,
           com2,
@@ -129,8 +130,8 @@ function App() {
         companyName: '',
         email: '',
         subsidiary: 0,
-        industry: '',
-        sectors: '',
+        industry: industries[0],
+        sector: sectors[industries[0]][0],
         com1: '',
         com1desc: '',
         com2: '',
@@ -183,10 +184,18 @@ function App() {
             </select>
           </div>
           <div className='form-group mt-3 col-md-6'>
-            <input type='text' name='industry' className='form-control mt-1' placeholder='Industry' value={data.industry} onChange={handleChange} />
+            <select name='industry' className='form-control mt-1' value={data.industry} onChange={handleChange}>
+              {industries.map((industry, index) => (
+                <option key={index} value={industry}>{industry}</option>
+              ))}
+            </select>
           </div>
           <div className='form-group mt-3 col-md-6'>
-            <input type='text' name='sectors' className='form-control mt-1' placeholder='Sectors' value={data.sectors} onChange={handleChange} />
+            <select name='sector' className='form-control mt-1' value={data.sector} onChange={handleChange}>
+              {sectors[industry].map((s, index) => (
+                <option key={index} value={s}>{s}</option>
+              ))}
+            </select>
           </div>
           <div className='col-md-6'></div>
           <div className='mt-2 col-md-6'>

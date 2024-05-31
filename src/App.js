@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, Select, MenuItem, CssBaseline, TextField } from '@mui/material';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { industries, sectors, subdiaries } from './constants';
@@ -35,6 +35,13 @@ function App() {
     com7: '',
     com7desc: '',
   });
+
+  useEffect(() => {
+    setData(prevData => ({
+      ...prevData,
+      sector: sectors[data.industry][0],
+    }));
+  }, [data.industry])
 
   const {
     companyName,

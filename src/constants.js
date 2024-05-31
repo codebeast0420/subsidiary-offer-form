@@ -17,6 +17,20 @@ export const ADVANCED_MATERIALS = "Advanced Materials";
 export const BLOCKCHAIN = "Blockchain";
 export const AGING_AND_LONGEVITY_FINANCE = "Aging and Longevity Finance";
 
+export const subdiaries = [
+	{
+		name: "Deep Pharma Intelligence",
+		url: "www.deep-pharma.tech",
+		email: "info@deep-pharma.tech",
+		logo: "https://static.wixstatic.com/media/50ab4b_5b82fb4244ee46bb9b4976d17d0bacc5~mv2.png/v1/fill/w_161,h_74,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/DPI%20blue_edited.png"
+	},
+	{
+		name: "Aging Analytics Agency",
+		url: "www.aginganalytics.com",
+		email: "info@aginganalytics.com",
+		logo: "https://static.wixstatic.com/media/d7b9fd_050872c71d1c4353a5b0261fbddd431f~mv2.png/v1/fill/w_168,h_84,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/aaa-logo.png"
+	}
+]
 
 export const industries = [
 	PHARMACEUTICALS,

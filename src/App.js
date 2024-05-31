@@ -1,26 +1,18 @@
-import logo from './logo.svg';
+import { FormControl, InputLabel, Select, MenuItem, CssBaseline, TextField } from '@mui/material';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import './App.css';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { industries, sectors } from './constants';
+import { industries, sectors, subdiaries } from './constants';
 
 function App() {
 
-  const subdiaries = [
-    {
-      name: "Deep Pharma Intelligence",
-      url: "www.deep-pharma.tech",
-      email: "info@deep-pharma.tech",
-      logo: "https://static.wixstatic.com/media/50ab4b_5b82fb4244ee46bb9b4976d17d0bacc5~mv2.png/v1/fill/w_161,h_74,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/DPI%20blue_edited.png"
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
     },
-    {
-      name: "Aging Analytics Agency",
-      url: "www.aginganalytics.com",
-      email: "info@aginganalytics.com",
-      logo: "https://static.wixstatic.com/media/d7b9fd_050872c71d1c4353a5b0261fbddd431f~mv2.png/v1/fill/w_168,h_84,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/aaa-logo.png"
-    }
-  ]
+  });
 
   const [data, setData] = useState({
     companyName: '',
@@ -152,115 +144,218 @@ function App() {
     }
   }
   return (
-    <div className='w-100 d-flex align-items-center justify-content-center bg-dark p-5' onSubmit={handleSubmit}>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <form className='card shadow-lg p-5 form bg-dark d-flex align-items-center' style={{ width: '60%', maxWidth: '800px' }}>
-        <div className='card-header text-white text-center'>
-          <h1>Create New Cooperation Proposal</h1>
-        </div>
-        <div className='card-body mt-3 d-flex row'>
-          <div className='form-group col-md-6'>
-            <input type='text' name='companyName' placeholder='Company' className='form-control mt-1' value={data.companyName} onChange={handleChange} />
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <div className='w-100 d-flex align-items-center justify-content-center bg-dark p-5' onSubmit={handleSubmit}>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        <form className='card shadow-lg p-5 form bg-dark d-flex align-items-center' style={{ width: '60%', maxWidth: '800px' }}>
+          <div className='card-header text-white text-center'>
+            <h1>Create New Cooperation Proposal</h1>
           </div>
-          <div className='form-group col-md-6'>
-            <input type='email' name='email' className='form-control mt-1' placeholder='My Email' value={data.email} onChange={handleChange} />
+          <div className='card-body mt-3 d-flex row'>
+            <div className='form-group col-md-6'>
+              <TextField fullWidth id="outlined-basic" label="Company" name='companyName' placeholder='Company' value={data.companyName} onChange={handleChange} variant="outlined" />
+            </div>
+            <div className='form-group col-md-6'>
+              <TextField fullWidth type='email' id="outlined-basic" label="My Email" name='email' placeholder='My Email' value={data.email} onChange={handleChange} variant="outlined" />
+            </div>
+            <div className='form-group mt-3 col-md-6'>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Subsidiary</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={data.subsidiary}
+                  label="Subsidiary"
+                  name='subsidiary'
+                  onChange={handleChangeSub}
+                >
+                  {subdiaries.map((subsidiary, index) => (
+                    <MenuItem key={index} value={index}>{subsidiary.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            <div className='form-group mt-3 col-md-6'>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Industry</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={data.industry}
+                  label="Industry"
+                  name='industry'
+                  onChange={handleChange}
+                >
+                  {industries.map((industry, index) => (
+                    <MenuItem key={index} value={industry}>{industry}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            <div className='form-group mt-3 col-md-6'>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Subsectors</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={data.sector}
+                  label="Subsectors"
+                  name='sector'
+                  onChange={handleChange}
+                >
+                  {sectors[industry].map((s, index) => (
+                    <MenuItem key={index} value={s}>{s}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            <div className='col-md-6'></div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 1" name='com1' placeholder='Component 1' value={data.com1} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com1desc'
+                  className='mt-1'
+                  placeholder='Component 1 Description'
+                  value={data.com1desc}
+                  onChange={handleChange}
+                  label="Component 1 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 2" name='com2' placeholder='Component 2' value={data.com2} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com2desc'
+                  className='mt-1'
+                  placeholder='Component 2 Description'
+                  value={data.com2desc}
+                  onChange={handleChange}
+                  label="Component 2 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 3" name='com3' placeholder='Component 3' value={data.com3} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com3desc'
+                  className='mt-1'
+                  placeholder='Component 3 Description'
+                  value={data.com3desc}
+                  onChange={handleChange}
+                  label="Component 3 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 4" name='com4' placeholder='Component 4' value={data.com4} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com4desc'
+                  className='mt-1'
+                  placeholder='Component 4 Description'
+                  value={data.com4desc}
+                  onChange={handleChange}
+                  label="Component 4 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 5" name='com5' placeholder='Component 5' value={data.com5} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com5desc'
+                  className='mt-1'
+                  placeholder='Component 5 Description'
+                  value={data.com5desc}
+                  onChange={handleChange}
+                  label="Component 5 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 6" name='com6' placeholder='Component 6' value={data.com6} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com6desc'
+                  className='mt-1'
+                  placeholder='Component 6 Description'
+                  value={data.com6desc}
+                  onChange={handleChange}
+                  label="Component 6 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className='mt-2 col-md-6'>
+              <div className='form-group mt-3'>
+                <TextField fullWidth id="outlined-basic" label="Component 7" name='com7' placeholder='Component 7' value={data.com7} onChange={handleChange} variant="outlined" />
+              </div>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='com7desc'
+                  className='mt-1'
+                  placeholder='Component 7 Description'
+                  value={data.com7desc}
+                  onChange={handleChange}
+                  label="Component 7 Description"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
           </div>
-          <div className='form-group mt-3 col-md-6'>
-            <select name='subsidiary' className='form-control mt-1' value={data.subsidiary} onChange={handleChangeSub}>
-              {subdiaries.map((subsidiary, index) => (
-                <option key={index} value={index}>{subsidiary.name}</option>
-              ))}
-            </select>
+          <div className='card-footer d-flex justify-content-between mt-3 w-100'>
+            <button className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>Submit</button>
+            <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
           </div>
-          <div className='form-group mt-3 col-md-6'>
-            <select name='industry' className='form-control mt-1' value={data.industry} onChange={handleChange}>
-              {industries.map((industry, index) => (
-                <option key={index} value={industry}>{industry}</option>
-              ))}
-            </select>
-          </div>
-          <div className='form-group mt-3 col-md-6'>
-            <select name='sector' className='form-control mt-1' value={data.sector} onChange={handleChange}>
-              {sectors[industry].map((s, index) => (
-                <option key={index} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
-          <div className='col-md-6'></div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com1' className='form-control mt-1' placeholder='Component 1' value={data.com1} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com1desc' className='form-control mt-1' placeholder='Component 1 Description' value={data.com1desc} onChange={handleChange} />
-            </div>
-          </div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com2' className='form-control mt-1' placeholder='Component 2' value={data.com2} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com2desc' className='form-control mt-1' placeholder='Component 2 Description' value={data.com2desc} onChange={handleChange} />
-            </div>
-          </div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com3' className='form-control mt-1' placeholder='Component 3' value={data.com3} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com3desc' className='form-control mt-1' placeholder='Component 3 Description' value={data.com3desc} onChange={handleChange} />
-            </div>
-          </div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com4' className='form-control mt-1' placeholder='Component 4' value={data.com4} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com4desc' className='form-control mt-1' placeholder='Component 4 Description' value={data.com4desc} onChange={handleChange} />
-            </div>
-          </div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com5' className='form-control mt-1' placeholder='Component 5' value={data.com5} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com5desc' className='form-control mt-1' placeholder='Component 5 Description' value={data.com5desc} onChange={handleChange} />
-            </div>
-          </div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com6' className='form-control mt-1' placeholder='Component 6' value={data.com6} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com6desc' className='form-control mt-1' placeholder='Component 6 Description' value={data.com6desc} onChange={handleChange} />
-            </div>
-          </div>
-          <div className='mt-2 col-md-6'>
-            <div className='form-group mt-3'>
-              <input type='text' name='com7' className='form-control mt-1' placeholder='Component 7' value={data.com7} onChange={handleChange} />
-            </div>
-            <div className='form-group mt-2'>
-              <textarea type='text' name='com7desc' className='form-control mt-1' placeholder='Component 7 Description' value={data.com7desc} onChange={handleChange} />
-            </div>
-          </div>
-        </div>
-        <div className='card-footer d-flex justify-content-between mt-3 w-100'>
-          <button className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>Submit</button>
-          <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </ThemeProvider>
   );
 }
 

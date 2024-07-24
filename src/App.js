@@ -108,7 +108,6 @@ function App() {
 
   const handleChangeSub = (event) => {
     const selectedSubsidiaryIndex = event.target.value;
-
     setData(prevData => ({
       ...prevData,
       subsidiary: selectedSubsidiaryIndex,

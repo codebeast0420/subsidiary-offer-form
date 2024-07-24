@@ -1,7 +1,9 @@
-import { FormControl, InputLabel, Select, MenuItem, CssBaseline, TextField } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, CssBaseline, TextField, Box, Modal, Typography, Button, CircularProgress, Stack } from '@mui/material';
+import { saveAs } from 'file-saver';
+import OpenAI from 'openai';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { industries, sectors, subdiaries } from './constants';
@@ -14,6 +16,10 @@ function App() {
     },
   });
 
+  const [open, setOpen] = useState(false);
+  const [threadId, setThreadId] = useState(null);
+  const [proposal, setProposal] = useState('');
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     companyName: '',
     email: '',
@@ -36,12 +42,43 @@ function App() {
     com7desc: '',
   });
 
+  const openai = new OpenAI({ apiKey: process.env.REACT_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+
+  const createThread = async () => {
+    const thread = await openai.beta.threads.create();
+    setThreadId(thread.id);
+  }
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '70vw',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    maxHeight: '80vh',
+    overflowY: 'auto',
+    p: 4,
+  };
+
+  useEffect(() => {
+    createThread();
+  }, []);
+
   useEffect(() => {
     setData(prevData => ({
       ...prevData,
       sector: sectors[data.industry][0],
     }));
-  }, [data.industry])
+  }, [data.industry]);
+
+  const saveProposalAsTxt = () => {
+    const proposalContent = proposal;
+    const blob = new Blob([proposalContent], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, `${companyName} and ${subdiaries[subsidiary].name} Cooperation Proposal.txt`);
+  };
 
   const {
     companyName,
@@ -78,6 +115,78 @@ function App() {
     }));
   };
 
+  const createMessage = async () => {
+    setLoading(true);
+    const message = await openai.beta.threads.messages.create(
+      threadId,
+      {
+        role: "user",
+        content: `Examine the "proposal example" files in your knowledge, and based on that style and format, write for me an imaginary but realistic DKG's subsidiary ${subdiaries[subsidiary].name} cooperation proposal with ${companyName}. Please create proposal without any annotations.`
+      }
+    );
+
+    let run = await openai.beta.threads.runs.createAndPoll(
+      threadId,
+      {
+        assistant_id: process.env.REACT_APP_ASSISTANT_ID,
+      }
+    );
+    if (run.status === 'completed') {
+      const messages = await openai.beta.threads.messages.list(
+        run.thread_id
+      );
+
+      const history = [];
+      for (const message of messages.data.reverse()) {
+        console.log(`${message.role} > ${message.content[0].text.value}`);
+        let index = 0;
+        const { text } = message.content[0];
+        text.value = text.value.replace(/\*\*/g, "");
+        text.value = text.value.replace(/\#\#\#/g, "");
+        text.value = text.value.replace(/\#/g, "");
+        const { annotations } = text;
+        const citations = [];
+        for (let annotation of annotations) {
+          // text.value = text.value.replace(annotation.text, "[" + index + "]");
+          text.value = text.value.replace(annotation.text, "");
+          const { file_citation } = annotation;
+          if (file_citation) {
+            const citedFile = await openai.files.retrieve(file_citation.file_id);
+            citations.push("[" + index + "]" + citedFile.filename);
+          }
+          index++;
+        }
+        history.push({ role: message.role, content: text.value });
+        console.log(citations.join("\n"));
+      }
+      console.log(history);
+      setProposal(history[history.length - 1].content);
+      let message = `TO: ${email}\n` +
+        `Subject: ${companyName} and ${subdiaries[subsidiary].name} Cooperation Proposal\n` +
+        'Content-Type: text/html; charset=utf-8\n\n' +
+        '<html>' +
+        '<body>' +
+        `<h1>${companyName} and ${subdiaries[subsidiary].name} Cooperation Proposal</h1>` +
+        '<br>' +
+        history[history.length - 1].content.split('\n').map(line => `<p>${line}</p>`).join('') +
+        '</body>' +
+        '</html>';
+
+      await fetch('https://gmail-beta.vercel.app/mail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message
+        })
+      });
+      // }
+    } else {
+      console.log(run.status);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
@@ -92,60 +201,9 @@ function App() {
 
     try {
       console.log('data', data);
-      const response = await fetch('https://v1.nocodeapi.com/johndkv/google_sheets/sHitMQQLfiqiwMiN?tabId=Form responses 1', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify([[
-          new Date().toLocaleString(),
-          companyName,
-          email,
-          subdiaries[subsidiary].name,
-          subdiaries[subsidiary].url,
-          subdiaries[subsidiary].email,
-          subdiaries[subsidiary].logo,
-          industry,
-          sector,
-          com1,
-          com1desc,
-          com2,
-          com2desc,
-          com3,
-          com3desc,
-          com4,
-          com4desc,
-          com5,
-          com5desc,
-          com6,
-          com6desc,
-          com7,
-          com7desc,
-        ]])
-      });
-      await response.json();
-      toast.success('Company added successfully');
-      setData({
-        companyName: '',
-        email: '',
-        subsidiary: 0,
-        industry: industries[0],
-        sector: sectors[industries[0]][0],
-        com1: '',
-        com1desc: '',
-        com2: '',
-        com2desc: '',
-        com3: '',
-        com3desc: '',
-        com4: '',
-        com4desc: '',
-        com5: '',
-        com5desc: '',
-        com6: '',
-        com6desc: '',
-        com7: '',
-        com7desc: '',
-      });
+      await createMessage();
+      setLoading(false);
+      setOpen(true);
     } catch (error) {
       console.log(error);
     }
@@ -357,11 +415,40 @@ function App() {
             </div>
           </div>
           <div className='card-footer d-flex justify-content-between mt-3 w-100'>
-            <button className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>Submit</button>
+            <button className='btn btn-primary mt-2 p-2' style={{ width: '40%', height: "40px" }} disabled={loading}>
+              {loading ? <CircularProgress size={20} /> : "Submit"}
+            </button>
             <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
           </div>
         </form>
       </div>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {companyName} and {subdiaries[subsidiary].name} Cooperation Proposal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {proposal.split('\n').map((line, index) => (
+              <Fragment key={index}>
+                {line}
+                <br />
+              </Fragment>
+            ))}
+          </Typography>
+          <Stack direction="row" style={{ marginTop: '10px' }} spacing={2} justifyContent={"center"} >
+            <Button variant='contained' onClick={() => {
+              saveProposalAsTxt();
+              setOpen(false);
+            }}>Save</Button>
+            <Button variant='contained' onClick={() => setOpen(false)}>Close</Button>
+          </Stack>
+        </Box>
+      </Modal>
     </ThemeProvider>
   );
 }

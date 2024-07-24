@@ -186,6 +186,30 @@ function App() {
     }
   }
 
+  const clearData = () => {
+    setData({
+      companyName: '',
+      email: '',
+      subsidiary: 0,
+      industry: industries[0],
+      sector: sectors[industries[0]][0],
+      com1: '',
+      com1desc: '',
+      com2: '',
+      com2desc: '',
+      com3: '',
+      com3desc: '',
+      com4: '',
+      com4desc: '',
+      com5: '',
+      com5desc: '',
+      com6: '',
+      com6desc: '',
+      com7: '',
+      com7desc: '',
+    });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
@@ -394,30 +418,12 @@ function App() {
                 />
               </div>
             </div>
-            <div className='mt-2 col-md-6'>
-              <div className='form-group mt-3'>
-                <TextField fullWidth id="outlined-basic" label="Component 7" name='com7' placeholder='Component 7' value={data.com7} onChange={handleChange} variant="outlined" />
-              </div>
-              <div className='form-group mt-2'>
-                <TextField
-                  multiline
-                  name='com7desc'
-                  className='mt-1'
-                  placeholder='Component 7 Description'
-                  value={data.com7desc}
-                  onChange={handleChange}
-                  label="Component 7 Description"
-                  variant="outlined"
-                  fullWidth
-                />
-              </div>
-            </div>
           </div>
-          <div className='card-footer d-flex justify-content-between mt-3 w-100'>
-            <button className='btn btn-primary mt-2 p-2' style={{ width: '40%', height: "40px" }} disabled={loading}>
-              {loading ? <CircularProgress size={20} /> : "Submit"}
+          <div className='card-footer d-flex justify-content-center mt-3 w-100'>
+            <button className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading}>
+              {loading ? <><CircularProgress size={20} /> <span style={{marginLeft: "8px"}}>Submitting</span></> : "Submit"}
             </button>
-            <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a>
+            {/* <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a> */}
           </div>
         </form>
       </div>
@@ -442,9 +448,13 @@ function App() {
           <Stack direction="row" style={{ marginTop: '10px' }} spacing={2} justifyContent={"center"} >
             <Button variant='contained' onClick={() => {
               saveProposalAsTxt();
+              clearData();
               setOpen(false);
             }}>Save</Button>
-            <Button variant='contained' onClick={() => setOpen(false)}>Close</Button>
+            <Button variant='contained' onClick={() => {
+              setOpen(false);
+              clearData();
+            }}>Close</Button>
           </Stack>
         </Box>
       </Modal>

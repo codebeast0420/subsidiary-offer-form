@@ -98,8 +98,7 @@ function App() {
     com5desc,
     com6,
     com6desc,
-    com7,
-    com7desc,
+    otherInfo,
   } = data;
 
   const handleChange = (e) => {
@@ -116,11 +115,21 @@ function App() {
 
   const createMessage = async () => {
     setLoading(true);
+    const prompt = `Examine the "proposal example" files in your knowledge, and based on that style and format, write for me an imaginary but realistic DKG's subsidiary ${subdiaries[subsidiary].name} cooperation proposal with ${companyName}.\n` +
+      `Also, please reflect these information from User:\n` +
+      `${com1}: ${com1desc}\n` +
+      `${com2}: ${com2desc}\n` +
+      `${com3}: ${com3desc}\n` +
+      `${com4}: ${com4desc}\n` +
+      `${com5}: ${com5desc}\n` +
+      `${com6}: ${com6desc}\n` +
+      `Other Information: ${otherInfo}\n` +
+      `Please create proposal without any annotations.`;
     const message = await openai.beta.threads.messages.create(
       threadId,
       {
         role: "user",
-        content: `Examine the "proposal example" files in your knowledge, and based on that style and format, write for me an imaginary but realistic DKG's subsidiary ${subdiaries[subsidiary].name} cooperation proposal with ${companyName}. Please create proposal without any annotations.`
+        content: prompt,
       }
     );
 
@@ -253,7 +262,7 @@ function App() {
           </div>
           <div className='card-body mt-3 d-flex row'>
             <div className='form-group col-md-6'>
-              <TextField fullWidth id="outlined-basic" label="Company" name='companyName' placeholder='Company' value={data.companyName} onChange={handleChange} variant="outlined" />
+              <TextField fullWidth id="outlined-basic" label="Company" name='companyName' placeholder='Recipient Organization' value={data.companyName} onChange={handleChange} variant="outlined" />
             </div>
             <div className='form-group col-md-6'>
               <TextField fullWidth type='email' id="outlined-basic" label="My Email" name='email' placeholder='My Email' value={data.email} onChange={handleChange} variant="outlined" />
@@ -418,10 +427,26 @@ function App() {
                 />
               </div>
             </div>
+            <div className='mt-2 col-md-12'>
+              <div className='form-group mt-2'>
+                <TextField
+                  multiline
+                  name='otherInfo'
+                  className='mt-1'
+                  placeholder='Other Information'
+                  value={data.otherInfo}
+                  rows={5}
+                  onChange={handleChange}
+                  label="Other Information"
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+            </div>
           </div>
           <div className='card-footer d-flex justify-content-center mt-3 w-100'>
             <button className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading}>
-              {loading ? <><CircularProgress size={20} /> <span style={{marginLeft: "8px"}}>Submitting</span></> : "Submit"}
+              {loading ? <><CircularProgress size={20} /> <span style={{ marginLeft: "8px" }}>Submitting</span></> : "Submit"}
             </button>
             {/* <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a> */}
           </div>

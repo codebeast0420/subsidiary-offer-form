@@ -262,7 +262,7 @@ function App() {
           </div>
           <div className='card-body mt-3 d-flex row'>
             <div className='form-group col-md-6'>
-              <TextField fullWidth id="outlined-basic" label="Company" name='companyName' placeholder='Recipient Organization' value={data.companyName} onChange={handleChange} variant="outlined" />
+              <TextField fullWidth id="outlined-basic" label="Recipient Organization" name='companyName' placeholder='Recipient Organization' value={data.companyName} onChange={handleChange} variant="outlined" />
             </div>
             <div className='form-group col-md-6'>
               <TextField fullWidth type='email' id="outlined-basic" label="My Email" name='email' placeholder='My Email' value={data.email} onChange={handleChange} variant="outlined" />
@@ -433,11 +433,11 @@ function App() {
                   multiline
                   name='otherInfo'
                   className='mt-1'
-                  placeholder='Other Information'
+                  placeholder="Other Information: e.g. the recipient organization's website"
                   value={data.otherInfo}
                   rows={5}
                   onChange={handleChange}
-                  label="Other Information"
+                  label="Other Information: e.g. the recipient organization's website"
                   variant="outlined"
                   fullWidth
                 />

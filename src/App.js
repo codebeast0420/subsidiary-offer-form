@@ -265,7 +265,7 @@ function App() {
               <TextField fullWidth id="outlined-basic" label="Recipient Organization" name='companyName' placeholder='Recipient Organization' value={data.companyName} onChange={handleChange} variant="outlined" />
             </div>
             <div className='form-group col-md-6'>
-              <TextField fullWidth type='email' id="outlined-basic" label="My Email" name='email' placeholder='My Email' value={data.email} onChange={handleChange} variant="outlined" />
+              <TextField fullWidth type='email' id="outlined-basic" label="Email" name='email' placeholder='Email' value={data.email} onChange={handleChange} variant="outlined" />
             </div>
             <div className='form-group mt-3 col-md-6'>
               <FormControl fullWidth>

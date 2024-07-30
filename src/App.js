@@ -472,7 +472,7 @@ function App() {
           </div>
           <div className='card-footer d-flex justify-content-around mt-3 w-100'>
             <button type='button' className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading} onClick={() => setIsAnalysis(true)}>
-              Get Diagnosis
+              Diagnose Frontend
             </button>
             <button type='submit' className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading}>
               {loading ? <><CircularProgress size={20} /> <span style={{ marginLeft: "8px" }}>Submitting</span></> : "Submit"}

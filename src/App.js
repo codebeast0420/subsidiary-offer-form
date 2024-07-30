@@ -7,6 +7,7 @@ import { useEffect, useState, Fragment } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { industries, sectors, subdiaries } from './constants';
+import Analysis from './Components/Analysis';
 
 function App() {
 
@@ -19,6 +20,8 @@ function App() {
   const [open, setOpen] = useState(false);
   const [threadId, setThreadId] = useState(null);
   const [proposal, setProposal] = useState('');
+  const [summary, setSummary] = useState('');
+  const [isAnalaysis, setIsAnalysis] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     companyName: '',
@@ -38,8 +41,7 @@ function App() {
     com5desc: '',
     com6: '',
     com6desc: '',
-    com7: '',
-    com7desc: '',
+    otherInfo: ''
   });
 
   const openai = new OpenAI({ apiKey: process.env.REACT_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
@@ -63,6 +65,22 @@ function App() {
     p: 4,
   };
 
+  const analysisStyle = {
+    position: 'absolute', // This is necessary for centering
+    top: '50%',
+    left: '50%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    transform: 'translate(-50%, -50%)',
+    width: { sm: '90%', md: '60%' }, // Responsive width
+    maxHeight: '100vh', // Limits the height, preventing overflow
+    overflowY: 'auto', // Allows scrolling within the modal
+    bgcolor: 'background.paper', // Background color
+    boxShadow: 24, // Shadow effect
+    p: 2 // Padding around the content
+  }
+
   useEffect(() => {
     createThread();
   }, []);
@@ -73,6 +91,13 @@ function App() {
       sector: sectors[data.industry][0],
     }));
   }, [data.industry]);
+
+  useEffect(() => {
+    setData(prevData => ({
+      ...prevData,
+      otherInfo: summary !== "" ? "This proposal seeks to solve the following diagnosis:\n" + summary : ""
+    }));
+  }, [summary]);
 
   const saveProposalAsTxt = () => {
     const proposalContent = proposal;
@@ -217,6 +242,7 @@ function App() {
       com7: '',
       com7desc: '',
     });
+    setSummary("");
   }
 
   const handleSubmit = async (e) => {
@@ -444,11 +470,13 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='card-footer d-flex justify-content-center mt-3 w-100'>
-            <button className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading}>
+          <div className='card-footer d-flex justify-content-around mt-3 w-100'>
+            <button type='button' className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading} onClick={() => setIsAnalysis(true)}>
+              Get Diagnosis
+            </button>
+            <button type='submit' className='btn btn-primary mt-2 p-2 d-flex align-items-center justify-content-center' style={{ width: '40%', height: "40px" }} disabled={loading}>
               {loading ? <><CircularProgress size={20} /> <span style={{ marginLeft: "8px" }}>Submitting</span></> : "Submit"}
             </button>
-            {/* <a href='https://docs.google.com/document/d/1qd16HyHbsOcTav0lc0gUP1xMcA19m_drv6LIKkXkz7c/edit?usp=sharing' target='_blank' className='btn btn-primary mt-2 p-2' style={{ width: '40%' }}>View Template</a> */}
           </div>
         </form>
       </div>
@@ -481,6 +509,17 @@ function App() {
               clearData();
             }}>Close</Button>
           </Stack>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={isAnalaysis}
+        onClose={() => setIsAnalysis(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={analysisStyle}>
+          <Analysis setSummary={setSummary} setIsAnalysis={setIsAnalysis} />
         </Box>
       </Modal>
     </ThemeProvider>

@@ -75,7 +75,7 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 				content: [
 					{
 						"type": "text",
-						"text": "Give me a tabluated score-based assessment of the visual components of this image. Table fileds are as follows: 1. Visual Component, 2. Score, 3. Comments."
+						"text": "Give me a tabulated score-based assessment of the visual components of this image. Use the items and criteria in your file 'methodology_for_assessing_visual_components.pdf'. Table fields are as follows: 1. Visual Component, 2. Score, 3. Comments."
 					},
 					{
 						"type": "image_url",

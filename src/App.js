@@ -338,6 +338,7 @@ function App() {
                   name='sector'
                   onChange={handleChange}
                 >
+                  <MenuItem key='none' value={'None'}>None</MenuItem>
                   {sectors[industry].map((s, index) => (
                     <MenuItem key={index} value={s}>{s}</MenuItem>
                   ))}

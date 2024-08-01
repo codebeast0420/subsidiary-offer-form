@@ -32,26 +32,26 @@ export const subdiaries = [
 	},
 	{
 		name: "Deep Knowledge Analytics",
-		url: "",
-		email: "",
+		url: "www.dkv.global",
+		email: "info@dkv.global",
 		logo: ""
 	},
 	{
 		name: "NeuroTech Analytics",
-		url: "",
+		url: "www.neurotech.com",
 		email: "",
 		logo: ""
 	},
 	{
 		name: "FemTech Analytics",
-		url: "",
-		email: "",
+		url: "www.femtech.health",
+		email: "info@femtech.health",
 		logo: ""
 	},
 	{
 		name: "SpaceTech Analytics",
-		url: "",
-		email: "",
+		url: "www.spacetech.global",
+		email: "info@spacetech.global",
 		logo: ""
 	},
 	{

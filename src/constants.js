@@ -29,7 +29,37 @@ export const subdiaries = [
 		url: "www.aginganalytics.com",
 		email: "info@aginganalytics.com",
 		logo: "https://static.wixstatic.com/media/d7b9fd_050872c71d1c4353a5b0261fbddd431f~mv2.png/v1/fill/w_168,h_84,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/aaa-logo.png"
-	}
+	},
+	{
+		name: "Deep Knowledge Analytics",
+		url: "",
+		email: "",
+		logo: ""
+	},
+	{
+		name: "NeuroTech Analytics",
+		url: "",
+		email: "",
+		logo: ""
+	},
+	{
+		name: "FemTech Analytics",
+		url: "",
+		email: "",
+		logo: ""
+	},
+	{
+		name: "SpaceTech Analytics",
+		url: "",
+		email: "",
+		logo: ""
+	},
+	{
+		name: "Artificial Intelligence Industry Analytics",
+		url: "",
+		email: "",
+		logo: ""
+	},
 ]
 
 export const industries = [

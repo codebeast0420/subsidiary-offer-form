@@ -45,12 +45,34 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 		message: 'Getting Image...'
 	});
 	const [modalOpen, setModalOpen] = useState(false);
+	const [scores, setScores] = useState(null);
+	const [maxScore, setMaxScore] = useState(null);
+	const [totalScore, setTotalScore] = useState(null);
+	const [highScoreComponents, setHighScoreComponents] = useState(null);
+	const [lowScoreComponents, setLowScoreComponents] = useState(null);
 
 	const openai = new OpenAI({ apiKey: process.env.REACT_APP_ANALYSIS_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
 	useEffect(() => {
 		createThread();
 	}, [formData.websiteUrl])
+
+	useEffect(() => {
+		if (result === null)
+			return;
+		let _scores = result.slice(1).map(row => row[1] !== "N/A" ? parseInt(row[1]) : 0);
+		let _maxscore = Math.max(..._scores);
+		let _totalScore = (_scores.reduce((acc, score) => acc + score, 0) / (_maxscore * _scores.length) * 100).toFixed(1);
+		let _highScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) > _maxscore - 1).map(row => row[0]);
+		let _lowScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) < 3).map(row => row[0]);
+
+		setScores(_scores);
+		setMaxScore(_maxscore);
+		setTotalScore(_totalScore);
+		setHighScoreComponents(_highScoreComponents);
+		setLowScoreComponents(_lowScoreComponents);
+	}, [result])
+
 	const createThread = async () => {
 		const thread = await openai.beta.threads.create();
 		setThreadId(thread.id);
@@ -215,12 +237,6 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 		setError(prev => ({ ...prev, [name]: !isValid }));
 	};
 
-	let scores = result.slice(1).map(row => row[1] !== "N/A" ? parseInt(row[1]) : 0);
-	let maxscore = Math.max(...scores);
-	let totalScore = (scores.reduce((acc, score) => acc + score, 0) / (maxscore * scores.length) * 100).toFixed(1);
-	let highScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) > maxscore - 1).map(row => row[0]);
-	let lowScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) < 3).map(row => row[0]);
-
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<CssBaseline />
@@ -341,13 +357,13 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 										<TableBody>
 											{result.slice(1).map((row, index) => {
 												return <TableRow key={index}>
-													{row.map((item, index) => {
-														if (index === 1) {
+													{row.map((item, k) => {
+														if (k === 1) {
 															// Check if the score is "N/A"
-															const scoreText = item === "N/A" ? `0/${maxscore}` : `${item}/${maxscore}`;
-															return <TableCell key={index}>{scoreText}</TableCell>;
+															const scoreText = item === "N/A" ? `0/${maxScore}` : `${item}/${maxScore}`;
+															return <TableCell key={k}>{scoreText}</TableCell>;
 														} else {
-															return <TableCell key={index}>{item}</TableCell>;
+															return <TableCell key={k}>{item}</TableCell>;
 														}
 													})}
 												</TableRow>
@@ -360,14 +376,17 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 									</Typography>
 								</span>
 								<span>The website's visual components scored {totalScore}%, {totalScore < 80 ? `reflecting both strengths and areas for improvement.` : 'there is  some areas for improvement.'}</span>
-								<sapn> Essential elements like {highScoreComponents.map((com, idx) => <sapn>{com}{idx < highScoreComponents.length - 1 && ', '}</sapn>)}are well-implemented.</sapn>
-								<spn> However, the site lacks advanced visualizations such as {lowScoreComponents.map((com, idx) => <sapn>{com}{idx < lowScoreComponents.length - 1 && ', '}</sapn>)}. </spn>
-								<sapn>Improving these elements can significantly improve the website's overall effectiveness and user experience.</sapn>
+								<span> Essential elements like {highScoreComponents.map((com, idx) => <span key={idx}>{com}{idx < highScoreComponents.length - 1 && ', '}</span>)}are well-implemented.</span>
+								{lowScoreComponents.length > 0 && (
+									<span> However, the site lacks advanced visualizations such as {lowScoreComponents.map((com, idx) => <span key={idx}>{com}{idx < lowScoreComponents.length - 1 && ', '}</span>)}. </span>
+								)}
+								<span>Improving these elements can significantly improve the website's overall effectiveness and user experience.</span>
 							</Container>
 							<Stack direction="row" style={{ marginTop: '10px' }} spacing={2} justifyContent={"center"} >
 								<Button variant='contained' onClick={() => {
 									const summaryString = `The website's visual components scored ${totalScore}%, ${totalScore < 80 ? `reflecting both strengths and areas for improvement.` : 'there are some areas for improvement.'} Essential elements like ${highScoreComponents.join(', ')} are well-implemented.`
-										+ `However, the site lacks advanced visualizations such as ${lowScoreComponents.join(', ')}. Improving these elements can significantly improve the website's overall effectiveness and user experience.`;
+										+ (lowScoreComponents.length > 0 ? ` However, the site lacks advanced visualizations such as ${lowScoreComponents.join(', ')}.` : '')
+										+ ` Improving these elements can significantly improve the website's overall effectiveness and user experience.`;
 									console.log("summary", summaryString);
 									setSummary(summaryString);
 									setModalOpen(false);

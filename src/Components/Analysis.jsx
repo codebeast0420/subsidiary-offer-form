@@ -64,7 +64,7 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 		let _maxscore = Math.max(..._scores);
 		let _totalScore = (_scores.reduce((acc, score) => acc + score, 0) / (_maxscore * _scores.length) * 100).toFixed(1);
 		let _highScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) > _maxscore - 1).map(row => row[0]);
-		let _lowScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) < 3).map(row => row[0]);
+		let _lowScoreComponents = result.slice(1).filter(component => parseInt(component[1], 10) < 5).map(row => row[0]);
 
 		setScores(_scores);
 		setMaxScore(_maxscore);

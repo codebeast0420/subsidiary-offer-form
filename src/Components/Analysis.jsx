@@ -260,7 +260,7 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 						helperText={error.name ? 'Invalid name' : ''}
 					/>
 					<TextField
-						type='email' // Use 'email' to get appropriate keyboard on mobile devices
+						type='email' 
 						error={error.email}
 						sx={{ marginTop: '10px' }}
 						name="email"

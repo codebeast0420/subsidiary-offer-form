@@ -52,6 +52,45 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 	const [lowScoreComponents, setLowScoreComponents] = useState(null);
 
 	const openai = new OpenAI({ apiKey: process.env.REACT_APP_ANALYSIS_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+	const tempPrompt = "Give me a tabulated score-based assessment of the visual components of this image." +
+		"Use the items and criteria in your file 'methodology_for_assessing_visual_components.pdf'." +
+		"Table columns are as follows: 1. Visual Component, 2. Score, 3. Comments." +
+		"And of course, as per your criteria file, the rows are:" +
+		"1. Benchmarking services" +
+		"2. Interactive Visualisations" +
+		"3. Charts builders" +
+		"4. Heatmap Solution" +
+		"5. Personalised Data Visualisation Solutions" +
+		"6. Portfolio Constructor" +
+		"7. Predictions" +
+		"8. Area Charts" +
+		"9. Bar charts and histograms" +
+		"10. Cards" +
+		"11. One number" +
+		"12. Combination charts" +
+		"13. Decomposition tree" +
+		"14. Donut chart" +
+		"15. Funnel charts" +
+		"16. Sensor diagrams" +
+		"17. Diagram of key influencing factors" +
+		"18. Key Performance Indicators" +
+		"19. Charts" +
+		"20. Matrix" +
+		"21. Pie chart" +
+		"22. Questions and Answers Visual" +
+		"23. R Script Visuals" +
+		"24. Ribbon diagram" +
+		"25. Scatter, bubble and scatter plot charts" +
+		"26. Visual element with auto-description" +
+		"27. Offline images" +
+		"28. Tables" +
+		"29. Tree diagrams" +
+		"30. Waterfall charts" +
+		"31. Radar Chart" +
+		"32. 3D Visualisation" +
+		"33. BarChart" +
+		"34. MindMap" +
+		"35. GeoMap"
 
 	useEffect(() => {
 		createThread();
@@ -97,7 +136,7 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 				content: [
 					{
 						"type": "text",
-						"text": "Give me a tabulated score-based assessment of the visual components of this image. Use the items and criteria in your file 'methodology_for_assessing_visual_components.pdf'. Table fields are as follows: 1. Visual Component, 2. Score, 3. Comments."
+						"text": tempPrompt
 					},
 					{
 						"type": "image_url",
@@ -260,7 +299,7 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 						helperText={error.name ? 'Invalid name' : ''}
 					/>
 					<TextField
-						type='email' 
+						type='email'
 						error={error.email}
 						sx={{ marginTop: '10px' }}
 						name="email"

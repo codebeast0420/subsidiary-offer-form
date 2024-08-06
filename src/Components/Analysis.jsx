@@ -227,7 +227,7 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 	};
 
 	const isValidEmail = (email) => {
-		return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+		return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(email);
 	};
 
 	const isValidCompany = (company) => {

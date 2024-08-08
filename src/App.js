@@ -506,6 +506,10 @@ function App() {
               setOpen(false);
             }}>Save</Button>
             <Button variant='contained' onClick={() => {
+              navigator.clipboard.writeText(proposal);
+              alert('Proposal copied to clipboard');
+            }}>Copy</Button>
+            <Button variant='contained' onClick={() => {
               setOpen(false);
               clearData();
             }}>Close</Button>

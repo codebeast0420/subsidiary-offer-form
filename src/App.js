@@ -370,10 +370,10 @@ function App() {
                 />
               )}
             />
-            <div className='form-group mt-2 col-md-6'>
+            <div className='form-group mt-3 col-md-6'>
               <TextField fullWidth id="outlined-basic" label="Recipient Organization" name='companyName' placeholder='Recipient Organization' value={data.companyName} onChange={handleChange} variant="outlined" />
             </div>
-            <div className='form-group mt-2 col-md-6'>
+            <div className='form-group mt-3 col-md-6'>
               <TextField fullWidth type='email' id="outlined-basic" label="Email" name='email' placeholder='Email' value={data.email} onChange={handleChange} variant="outlined" />
             </div>
             <div className='form-group mt-3 col-md-6'>

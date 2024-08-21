@@ -292,9 +292,14 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
+    if (!companyName) {
+      console.log('here')
+      return toast.error('Please fill in Recipient Organization');
+    }
+
     if (!companyName || !email) {
       console.log('here')
-      return toast.error('Please fill in all fields');
+      return toast.error('Please fill in Email');
     }
 
     if (companyName && email && !email.includes('@')) {

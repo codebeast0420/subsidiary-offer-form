@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select, MenuItem, CssBaseline, TextField, Box, Modal, Typography, Button, CircularProgress, Stack } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, CssBaseline, TextField, Box, Modal, Typography, Button, CircularProgress, Stack, Autocomplete } from '@mui/material';
 import { saveAs } from 'file-saver';
 import OpenAI from 'openai';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -23,6 +23,9 @@ function App() {
   const [summary, setSummary] = useState('');
   const [isAnalaysis, setIsAnalysis] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [leads, setLeads] = useState([]);
+  const [lead, setLead] = useState(null);
+  const [leadLoading, setLeadLoading] = useState(false);
   const [data, setData] = useState({
     companyName: '',
     email: '',
@@ -83,6 +86,7 @@ function App() {
 
   useEffect(() => {
     createThread();
+    fetchSheet();
   }, []);
 
   useEffect(() => {
@@ -99,11 +103,51 @@ function App() {
     }));
   }, [summary]);
 
+  useEffect(() => {
+    if (lead) {
+      setData({
+        companyName: lead["Company Name"],
+        email: lead["Email"],
+        subsidiary: 0,
+        industry: industries[0],
+        sector: sectors[industries[0]][0],
+        com1: '',
+        com1desc: '',
+        com2: '',
+        com2desc: '',
+        com3: '',
+        com3desc: '',
+        com4: '',
+        com4desc: '',
+        com5: '',
+        com5desc: '',
+        com6: '',
+        com6desc: '',
+        otherInfo: (lead["Domain"] ? `Domain is ${lead["Domain"]}\n` : "") + (lead["Country"] ? `Country is ${lead["Country"]}\n` : "") + (lead["HubSpot Score"] ? `HubSpot Score is ${lead["HubSpot Score"]}\n` : "")
+      });
+    }
+  }, [lead]);
+
   const saveProposalAsTxt = () => {
     const proposalContent = proposal;
     const blob = new Blob([proposalContent], { type: "text/plain;charset=utf-8" });
     saveAs(blob, `${companyName} and ${subdiaries[subsidiary].name} Cooperation Proposal.txt`);
   };
+
+  const fetchSheet = async () => {
+    try {
+      const response = await fetch('https://codeby-backend.vercel.app/get-sheet/');
+      
+      // Convert the response body to JSON
+      const data = await response.json();
+      
+      // Assuming the server returns an array, you can set the leads state
+      console.log("data", data);
+      setLeads(data); // data should be an array, based on your server response
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
 
   const {
     companyName,
@@ -287,10 +331,44 @@ function App() {
             <h1>Create New Cooperation Proposal</h1>
           </div>
           <div className='card-body mt-3 d-flex row'>
-            <div className='form-group col-md-6'>
+            <Autocomplete
+              fullWidth
+              value={lead}
+              loading={leadLoading}
+              onChange={(event, newValue) => {
+                setLead(newValue);
+              }}
+              id='select-leads'
+              options={leads}
+              getOptionLabel={(option) => option["Recent Conversion"]}
+              filterSelectedOptions
+              onInputChange={console.log('here')}
+              renderOption={(props, option) => (
+                <li {...props} key={option["Record ID"] || option["Recent Conversion"]}>
+                  {option["Recent Conversion"]}
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Entity"
+                  variant="outlined"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {leadLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
+            />
+            <div className='form-group mt-2 col-md-6'>
               <TextField fullWidth id="outlined-basic" label="Recipient Organization" name='companyName' placeholder='Recipient Organization' value={data.companyName} onChange={handleChange} variant="outlined" />
             </div>
-            <div className='form-group col-md-6'>
+            <div className='form-group mt-2 col-md-6'>
               <TextField fullWidth type='email' id="outlined-basic" label="Email" name='email' placeholder='Email' value={data.email} onChange={handleChange} variant="outlined" />
             </div>
             <div className='form-group mt-3 col-md-6'>

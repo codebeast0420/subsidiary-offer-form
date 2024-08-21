@@ -233,9 +233,9 @@ const Analysis = ({ setSummary, setIsAnalysis }) => {
 	const isValidCompany = (company) => {
 		return company.length > 0;  // Basic validation; adjust as needed
 	};
+	
 	const isValidUrl = (input) => {
 		const pattern = new RegExp('^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?$', 'i');
-
 		return pattern.test(input);
 	};
 

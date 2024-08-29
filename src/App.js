@@ -137,15 +137,40 @@ function App() {
   const fetchSheet = async () => {
     try {
       const response = await fetch('https://codeby-backend.vercel.app/get-sheet/');
-      
+      // const response = await fetch('http://localhost:5000/get-sheet/');
+
       // Convert the response body to JSON
       const data = await response.json();
-      
+
       // Assuming the server returns an array, you can set the leads state
       console.log("data", data);
       setLeads(data); // data should be an array, based on your server response
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  }
+
+  const submitProposal = async () => {
+    try {
+      const response = await fetch('https://codeby-backend.vercel.app/proposal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          recordID: lead["Record ID"],
+          proposal: proposal,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      console.log('response', response.ok);
+      const responseData = await response.json();
+      console.log('Proposal submitted successfully:', responseData);
+    } catch (error) {
+      console.error('Error submitting proposal:', error);
     }
   }
 
@@ -588,6 +613,11 @@ function App() {
               clearData();
               setOpen(false);
             }}>Save</Button>
+            <Button variant='contained' onClick={() => {
+              submitProposal();
+              clearData();
+              setOpen(false);
+            }}>Save to Sheet</Button>
             <Button variant='contained' onClick={() => {
               navigator.clipboard.writeText(proposal);
               alert('Proposal copied to clipboard');
